@@ -1,18 +1,42 @@
 <template>
   <v-app-bar flat>
-    <v-app-bar-title>
-      <v-icon icon="mdi-menu" />
-      Lista de Productos
-    </v-app-bar-title>
-    <!-- <v-app-bar-nav-icon>
-      <v-icon icon="mdi-menu" />
-    </v-app-bar-nav-icon> -->
+    <template v-slot:prepend>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+    </template>
+    <v-app-bar-title>Productos </v-app-bar-title>
+
+    <v-btn icon>
+      <v-icon>mdi-magnify</v-icon>
+    </v-btn>
+
+    <v-btn
+      icon
+      @click="
+        () => {
+          openDialog = true;
+        }
+      "
+    >
+      <v-icon>mdi-playlist-plus</v-icon>
+    </v-btn>
+
+    <v-btn icon>
+      <v-icon>mdi-dots-vertical</v-icon>
+    </v-btn>
   </v-app-bar>
-  <!-- <v-toolbar title="Application">
-    <v-icon icon="mdi-menu" />
-  </v-toolbar> -->
+  <DialogForm
+    :openDialog="openDialog"
+    @closeDialog="
+      () => {
+        openDialog = false;
+      }
+    "
+  />
 </template>
 
 <script setup>
-//
+import { ref } from "vue";
+import DialogForm from "../../components/products/DialogForm";
+
+const openDialog = ref(false);
 </script>
