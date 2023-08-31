@@ -5,10 +5,6 @@
     </template>
     <v-app-bar-title>Productos </v-app-bar-title>
 
-    <v-btn icon>
-      <v-icon>mdi-magnify</v-icon>
-    </v-btn>
-
     <v-btn
       icon
       @click="

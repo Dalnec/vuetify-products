@@ -1,7 +1,9 @@
 <template>
   <v-dialog v-model="props.openfeatureDialog" width="300">
     <v-card>
-      <v-card-title>Nuevo</v-card-title>
+      <v-card-title>
+        {{ featureType == "brands" ? "Marca" : "Categoria" }}</v-card-title
+      >
       <v-card-text>
         <v-form ref="formRef">
           <v-text-field
@@ -41,11 +43,14 @@
 </template>
 
 <script setup>
+import { axiosInstance } from "../api/index";
 import { ref } from "vue";
+
 const formRef = ref();
 const emit = defineEmits(["closeDialog"]);
 const props = defineProps({
   openfeatureDialog: Boolean,
+  featureType: String,
 });
 const loading = ref(false);
 const defaultformdata = ref({
@@ -64,9 +69,12 @@ const save = async () => {
   const { valid } = await formRef.value.validate();
   if (valid) {
     loading.value = true;
-
-    alert("Form is valid");
+    const res = await axiosInstance.post(`/${props.featureType}`, {
+      ...formdata.value,
+    });
+    console.log(res);
+    emit("closeDialog");
   }
-  setTimeout(() => (loading.value = false), 2000);
+  setTimeout(() => (loading.value = false), 1000);
 };
 </script>

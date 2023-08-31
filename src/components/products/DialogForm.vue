@@ -23,7 +23,7 @@
                 </v-col>
                 <v-col cols="6" sm="3" md="4" class="pa-md-1 pa-0 pr-1">
                   <v-select
-                    :items="['0-17', '18-29', '30-54', '54+']"
+                    :items="brandsOptions"
                     label="Marca"
                     v-model="formdata.brand"
                     required
@@ -32,21 +32,23 @@
                     @click:append-inner="
                       () => {
                         openfeatureDialog = true;
+                        featureType = 'brands';
                       }
                     "
                   ></v-select>
                 </v-col>
                 <v-col cols="6" sm="3" md="4" class="pa-md-1 pa-0 ps-1">
                   <v-select
-                    :items="['0-17', '18-29', '30-54', '54+']"
-                    label="Linea"
-                    v-model="formdata.line"
+                    :items="categoryOptions"
+                    label="Categoria"
+                    v-model="formdata.category"
                     required
                     clearable
                     append-inner-icon="mdi-plus-thick"
-                    @click:append="
+                    @click:append-inner="
                       () => {
                         openfeatureDialog = true;
+                        featureType = 'categories';
                       }
                     "
                   ></v-select>
@@ -131,15 +133,20 @@
   <DialogFormFeature
     :openfeatureDialog="openfeatureDialog"
     @closeDialog="
-      () => {
+      async () => {
         openfeatureDialog = !openfeatureDialog;
+        brandsOptions = await loadfeatures('brands');
+        categoryOptions = await loadfeatures('categories');
       }
     "
+    :featureType="featureType"
   />
 </template>
 <script setup>
-import { ref } from "vue";
+import { axiosInstance } from "../api/index";
 import DialogFormFeature from "./DialogFormFeature.vue";
+import { ref } from "vue";
+import { onMounted } from "vue";
 
 const emit = defineEmits(["closeDialog"]);
 const props = defineProps({
@@ -147,12 +154,15 @@ const props = defineProps({
 });
 
 const loading = ref(false);
+const featureType = ref("");
 const openfeatureDialog = ref(false);
 const formRef = ref();
+const brandsOptions = ref([]);
+const categoryOptions = ref([]);
 const defaultformdata = ref({
   code: "",
   description: "",
-  line: undefined,
+  category: undefined,
   brand: undefined,
   price: undefined,
   minprice: undefined,
@@ -187,4 +197,14 @@ const save = async () => {
   }
   setTimeout(() => (loading.value = false), 2000);
 };
+
+const loadfeatures = async (featureType) => {
+  const res = await axiosInstance.get(`/${featureType}`);
+  return res.data.map((f) => ({ title: f.description, value: f.ID }));
+};
+
+onMounted(async () => {
+  brandsOptions.value = await loadfeatures("brands");
+  categoryOptions.value = await loadfeatures("categories");
+});
 </script>
