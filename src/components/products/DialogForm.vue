@@ -128,17 +128,27 @@
             Guardar
           </v-btn>
         </v-card-actions>
-        <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre>
+        <!-- <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre> -->
       </v-card>
     </v-dialog>
   </v-row>
   <DialogFormFeature
     :openfeatureDialog="openfeatureDialog"
     @closeDialog="
-      async () => {
+      async (f) => {
         openfeatureDialog = !openfeatureDialog;
-        brandsOptions = await loadfeatures('brands');
-        categoryOptions = await loadfeatures('categories');
+        switch (featureType) {
+          case 'brands':
+            brandsOptions = await loadfeatures('brands');
+            formdata.brand_id = f.ID;
+            break;
+          case 'categories':
+            categoryOptions = await loadfeatures('categories');
+            formdata.category_id = f.ID;
+            break;
+          default:
+            break;
+        }
       }
     "
     :featureType="featureType"

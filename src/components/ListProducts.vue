@@ -16,7 +16,7 @@
         @update:modelValue="loadData"
       ></v-text-field>
     </v-card>
-    <CardProduct :data="data" />
+    <CardProduct v-for="(x, i) in data" :key="i" :data="x" />
   </div>
 </template>
 
@@ -41,7 +41,6 @@ const loadData = async (s) => {
     loading.value = false;
   }, 1000);
   data.value = res.data;
-  console.log("Cargo la funciion LoadData", s);
 };
 
 onMounted(async () => {

@@ -69,12 +69,13 @@ const save = async () => {
   const { valid } = await formRef.value.validate();
   if (valid) {
     loading.value = true;
+    formdata.value.description = formdata.value.description.toUpperCase();
     const res = await axiosInstance.post(`/${props.featureType}`, {
       ...formdata.value,
     });
     formdata.value = defaultformdata.value;
     console.log(res);
-    emit("closeDialog");
+    emit("closeDialog", res.data);
   }
   setTimeout(() => (loading.value = false), 1000);
 };
