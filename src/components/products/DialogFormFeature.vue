@@ -72,6 +72,7 @@ const save = async () => {
     const res = await axiosInstance.post(`/${props.featureType}`, {
       ...formdata.value,
     });
+    formdata.value = defaultformdata.value;
     console.log(res);
     emit("closeDialog");
   }

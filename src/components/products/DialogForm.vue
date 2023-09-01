@@ -21,11 +21,11 @@
                     clearable
                   ></v-text-field>
                 </v-col>
-                <v-col cols="6" sm="3" md="4" class="pa-md-1 pa-0 pr-1">
+                <v-col cols="12" sm="3" md="4" class="pa-md-1 pa-0 pr-1">
                   <v-select
                     :items="brandsOptions"
                     label="Marca"
-                    v-model="formdata.brand"
+                    v-model="formdata.brand_id"
                     required
                     clearable
                     append-inner-icon="mdi-plus-thick"
@@ -37,11 +37,11 @@
                     "
                   ></v-select>
                 </v-col>
-                <v-col cols="6" sm="3" md="4" class="pa-md-1 pa-0 ps-1">
+                <v-col cols="12" sm="3" md="4" class="pa-md-1 pa-0 ps-1">
                   <v-select
                     :items="categoryOptions"
                     label="Categoria"
-                    v-model="formdata.category"
+                    v-model="formdata.category_id"
                     required
                     clearable
                     append-inner-icon="mdi-plus-thick"
@@ -65,6 +65,7 @@
                 </v-col>
                 <v-col cols="12" sm="6" class="pa-1">
                   <v-text-field
+                    type="number"
                     label="Precio (x menor)"
                     v-model="formdata.price"
                     required
@@ -74,6 +75,7 @@
                 </v-col>
                 <v-col cols="12" sm="6" class="pa-1">
                   <v-text-field
+                    type="number"
                     label="Precio (x mayor)"
                     v-model="formdata.minprice"
                     required
@@ -126,7 +128,7 @@
             Guardar
           </v-btn>
         </v-card-actions>
-        <!-- <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre> -->
+        <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre>
       </v-card>
     </v-dialog>
   </v-row>
@@ -162,10 +164,11 @@ const categoryOptions = ref([]);
 const defaultformdata = ref({
   code: "",
   description: "",
-  category: undefined,
-  brand: undefined,
+  category_id: undefined,
+  brand_id: undefined,
   price: undefined,
   minprice: undefined,
+  user_id: 1,
 });
 const formdata = ref({ ...defaultformdata.value });
 
@@ -192,8 +195,14 @@ const save = async () => {
   const { valid } = await formRef.value.validate();
   if (valid) {
     loading.value = true;
-
-    alert("Form is valid");
+    formdata.value.price = parseFloat(formdata.value.price);
+    formdata.value.minprice = parseFloat(formdata.value.minprice);
+    const res = await axiosInstance.post("products", {
+      ...formdata.value,
+    });
+    formdata.value = defaultformdata.value;
+    console.log(res);
+    emit("closeDialog");
   }
   setTimeout(() => (loading.value = false), 2000);
 };
