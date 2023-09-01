@@ -25,14 +25,17 @@
     @closeDialog="
       () => {
         openDialog = false;
+        appStore.productDialog();
       }
     "
   />
 </template>
 
 <script setup>
+import { useAppStore } from "../../store/app";
 import { ref } from "vue";
 import DialogForm from "../../components/products/DialogForm";
 
 const openDialog = ref(false);
+const appStore = useAppStore();
 </script>

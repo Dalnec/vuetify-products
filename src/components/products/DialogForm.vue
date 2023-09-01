@@ -191,10 +191,20 @@ const nameRules = [
   },
 ];
 
+const capitalize = (data) => {
+  return Object.fromEntries(
+    Object.entries(data).map(([key, value]) => [
+      key,
+      typeof value == "string" ? value.toUpperCase() : value,
+    ])
+  );
+};
+
 const save = async () => {
   const { valid } = await formRef.value.validate();
   if (valid) {
     loading.value = true;
+    formdata.value = capitalize(formdata.value);
     formdata.value.price = parseFloat(formdata.value.price);
     formdata.value.minprice = parseFloat(formdata.value.minprice);
     const res = await axiosInstance.post("products", {

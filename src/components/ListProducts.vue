@@ -21,11 +21,14 @@
 </template>
 
 <script setup>
+// import { store } from "../store/index";
+import { useAppStore } from "../store/app.js";
 import CardProduct from "../components/CardProduct.vue";
 import { onMounted } from "vue";
 import { ref } from "vue";
 import { axiosInstance } from "./api";
 
+const appStore = useAppStore();
 const loading = ref(false);
 const search = ref("");
 const data = ref([]);
@@ -36,11 +39,18 @@ const loadData = async (s) => {
   const res = await axiosInstance.get(`/products`);
   setTimeout(() => {
     loading.value = false;
-  }, 2000);
+  }, 1000);
   data.value = res.data;
+  console.log("Cargo la funciion LoadData", s);
 };
 
 onMounted(async () => {
+  appStore.productDialog = loadData;
   await loadData();
 });
 </script>
+<style>
+input {
+  text-transform: uppercase;
+}
+</style>
