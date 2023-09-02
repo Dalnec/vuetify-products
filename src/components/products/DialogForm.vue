@@ -224,7 +224,7 @@ const save = async () => {
     console.log(res);
     emit("closeDialog");
   }
-  setTimeout(() => (loading.value = false), 2000);
+  setTimeout(() => (loading.value = false), 1000);
 };
 
 const loadfeatures = async (featureType) => {

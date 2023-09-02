@@ -17,6 +17,15 @@
       ></v-text-field>
     </v-card>
     <CardProduct v-for="(x, i) in data" :key="i" :data="x" />
+    <DialogForm
+      :openDialog="openDialog"
+      @closeDialog="
+        () => {
+          openDialog = false;
+          appStore.productDialog();
+        }
+      "
+    />
   </div>
 </template>
 
@@ -27,11 +36,13 @@ import CardProduct from "../components/CardProduct.vue";
 import { onMounted } from "vue";
 import { ref } from "vue";
 import { axiosInstance } from "./api";
+import DialogForm from "./products/DialogForm.vue";
 
 const appStore = useAppStore();
 const loading = ref(false);
 const search = ref("");
 const data = ref([]);
+const openDialog = ref(false);
 
 const loadData = async (s) => {
   loading.value = true;
