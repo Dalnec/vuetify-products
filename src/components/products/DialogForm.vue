@@ -14,6 +14,7 @@
               <v-row class="pa-2">
                 <v-col cols="12" sm="6" md="4" class="pa-1">
                   <v-text-field
+                    density="compact"
                     label="Código"
                     v-model="formdata.code"
                     hint="Opcional"
@@ -23,6 +24,7 @@
                 </v-col>
                 <v-col cols="12" sm="3" md="4" class="pa-md-1 pa-0 pr-1">
                   <v-select
+                    density="compact"
                     :items="brandsOptions"
                     label="Marca"
                     v-model="formdata.brand_id"
@@ -39,6 +41,7 @@
                 </v-col>
                 <v-col cols="12" sm="3" md="4" class="pa-md-1 pa-0 ps-1">
                   <v-select
+                    density="compact"
                     :items="categoryOptions"
                     label="Categoria"
                     v-model="formdata.category_id"
@@ -56,6 +59,7 @@
 
                 <v-col cols="12" sm="12" class="pa-1">
                   <v-text-field
+                    density="compact"
                     label="Descripcion"
                     v-model="formdata.description"
                     required
@@ -63,8 +67,9 @@
                     clearable
                   ></v-text-field>
                 </v-col>
-                <v-col cols="12" sm="6" class="pa-1">
+                <!-- <v-col cols="12" sm="6" class="pa-1">
                   <v-text-field
+                    density="compact"
                     type="number"
                     label="Precio (x menor)"
                     v-model="formdata.price"
@@ -75,6 +80,7 @@
                 </v-col>
                 <v-col cols="12" sm="6" class="pa-1">
                   <v-text-field
+                    density="compact"
                     type="number"
                     label="Precio (x mayor)"
                     v-model="formdata.minprice"
@@ -82,7 +88,7 @@
                     :rules="pricesRules"
                     clearable
                   ></v-text-field>
-                </v-col>
+                </v-col> -->
                 <!-- <v-col cols="12" sm="6">
                 <v-autocomplete
                   :items="[
@@ -101,6 +107,78 @@
                 ></v-autocomplete>
               </v-col> -->
               </v-row>
+              <div
+                class="text-body-1 font-weight-bold mb-4 d-flex align-center justify-space-between"
+              >
+                PRECIOS
+                <v-btn
+                  size="small"
+                  variant="outlined"
+                  color="deep-purple-accent-3"
+                  prepend-icon="mdi-plus"
+                >
+                  Agregar
+                </v-btn>
+              </div>
+
+              <v-sheet
+                elevation="2"
+                rounded="lg"
+                border="md"
+                class="ma-1 pa-3 mx-auto"
+                color="#FAFAFA"
+              >
+                <v-row class="pa-2" align="center" justify="center">
+                  <v-col cols="10" class="pa-md-1 pb-0 px-1">
+                    <v-select
+                      density="compact"
+                      :items="categoryOptions"
+                      label="Unidad Medida"
+                      v-model="formdata.category_id"
+                      required
+                      clearable
+                      append-inner-icon="mdi-plus-thick"
+                      @click:append-inner="
+                        () => {
+                          openfeatureDialog = true;
+                          featureType = 'categories';
+                        }
+                      "
+                    ></v-select>
+                  </v-col>
+                  <v-col cols="2" class="pa-1">
+                    <v-btn
+                      density="compact"
+                      size="x-large"
+                      color="red-accent-2"
+                      variant="text"
+                      icon="mdi-close-thick"
+                    ></v-btn>
+                  </v-col>
+                  <v-col cols="6" class="pa-1">
+                    <v-text-field
+                      density="compact"
+                      type="number"
+                      label="Precio (x menor)"
+                      v-model="formdata.price"
+                      required
+                      :rules="pricesRules"
+                      clearable
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="6" class="pa-1">
+                    <v-text-field
+                      density="compact"
+                      type="number"
+                      label="Precio (x mayor)"
+                      v-model="formdata.minprice"
+                      required
+                      :rules="pricesRules"
+                      clearable
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-sheet>
             </v-container>
             <v-divider></v-divider>
           </v-form>

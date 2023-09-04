@@ -17,15 +17,6 @@
           ></v-list-item> -->
           <v-list-item
             class="text-h5"
-            prepend-icon="mdi-cart-outline"
-            title="Venta"
-            value="sale"
-            variant="plain"
-            color="primary"
-            @click="$router.push({ name: 'Sale' })"
-          ></v-list-item>
-          <v-list-item
-            class="text-h5"
             prepend-icon="mdi-format-list-numbered"
             title="Productos"
             value="home"
@@ -33,11 +24,19 @@
             color="primary"
             @click="$router.push({ name: 'Home' })"
           ></v-list-item>
+          <v-list-item
+            class="text-h5"
+            prepend-icon="mdi-cart-outline"
+            title="Venta"
+            value="sale"
+            variant="plain"
+            color="primary"
+            @click="$router.push({ name: 'Sale' })"
+          ></v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-main>
         <v-app>
-          <!-- <v-btn color="primary" @click.stop="drawer = !drawer"> Toggle </v-btn> -->
           <v-main>
             <default-bar
               @drawer="
