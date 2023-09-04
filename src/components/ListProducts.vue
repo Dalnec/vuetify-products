@@ -16,33 +16,47 @@
         @update:modelValue="loadData"
       ></v-text-field>
     </v-card>
-    <CardProduct v-for="(x, i) in data" :key="i" :data="x" />
-    <DialogForm
-      :openDialog="openDialog"
-      @closeDialog="
-        () => {
-          openDialog = false;
-          appStore.productDialog();
+    <CardProduct
+      v-for="(x, i) in data"
+      :key="i"
+      :data="x"
+      @openDialog="
+        (data) => {
+          openDialog = true;
+          dataDialog = { ...data };
+          // console.log(dataDialog);
         }
       "
     />
   </div>
+  <DialogForm
+    :openDialog="openDialog"
+    @closeDialog="
+      () => {
+        openDialog = false;
+        dataDialog = {};
+        appStore.productDialog();
+      }
+    "
+    :data="dataDialog"
+  />
 </template>
 
 <script setup>
 // import { store } from "../store/index";
 import { useAppStore } from "../store/app.js";
 import CardProduct from "../components/CardProduct.vue";
+import DialogForm from "./products/DialogForm.vue";
 import { onMounted } from "vue";
 import { ref } from "vue";
 import { axiosInstance } from "./api";
-import DialogForm from "./products/DialogForm.vue";
 
 const appStore = useAppStore();
 const loading = ref(false);
+const openDialog = ref(false);
 const search = ref("");
 const data = ref([]);
-const openDialog = ref(false);
+const dataDialog = ref({});
 
 const loadData = async (s) => {
   loading.value = true;

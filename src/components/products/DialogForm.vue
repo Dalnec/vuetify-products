@@ -128,7 +128,7 @@
             Guardar
           </v-btn>
         </v-card-actions>
-        <!-- <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre> -->
+        <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre>
       </v-card>
     </v-dialog>
   </v-row>
@@ -158,11 +158,12 @@
 import { axiosInstance } from "../api/index";
 import DialogFormFeature from "./DialogFormFeature.vue";
 import { ref } from "vue";
-import { onMounted } from "vue";
+import { onMounted, onUpdated } from "vue";
 
 const emit = defineEmits(["closeDialog"]);
 const props = defineProps({
   openDialog: Boolean,
+  data: Object,
 });
 
 const loading = ref(false);
@@ -180,7 +181,9 @@ const defaultformdata = ref({
   minprice: undefined,
   user_id: 1,
 });
-const formdata = ref({ ...defaultformdata.value });
+const formdata = props.data
+  ? ref({ ...props.data })
+  : ref({ ...defaultformdata.value });
 
 const pricesRules = [
   (v) => !!v || "Precio es requerido",
@@ -213,11 +216,12 @@ const capitalize = (data) => {
 const save = async () => {
   const { valid } = await formRef.value.validate();
   if (valid) {
+    let res;
     loading.value = true;
     formdata.value = capitalize(formdata.value);
     formdata.value.price = parseFloat(formdata.value.price);
     formdata.value.minprice = parseFloat(formdata.value.minprice);
-    const res = await axiosInstance.post("products", {
+    res = await axiosInstance.post("products", {
       ...formdata.value,
     });
     formdata.value = defaultformdata.value;
@@ -231,6 +235,12 @@ const loadfeatures = async (featureType) => {
   const res = await axiosInstance.get(`/${featureType}`);
   return res.data.map((f) => ({ title: f.description, value: f.ID }));
 };
+
+onUpdated(() => {
+  if (props.data) {
+    formdata.value = props.data;
+  }
+});
 
 onMounted(async () => {
   brandsOptions.value = await loadfeatures("brands");

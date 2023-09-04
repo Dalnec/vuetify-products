@@ -9,7 +9,11 @@
           color="cyan-darken-2"
           variant="text"
           icon="mdi-pencil"
-          @click="() => {}"
+          @click="
+            () => {
+              $emit('openDialog', data);
+            }
+          "
         />
       </v-card-subtitle>
       <v-card-title style="padding: 0">{{ data.description }}</v-card-title>
@@ -49,9 +53,9 @@
 <script setup>
 import { ref } from "vue";
 
+const emit = defineEmits(["openDialog"]);
 const props = defineProps({
   data: Object,
 });
-
 const showMinPrice = ref(false);
 </script>
