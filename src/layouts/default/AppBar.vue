@@ -27,6 +27,10 @@
     @closeDialog="
       () => {
         openDialog = false;
+      }
+    "
+    @reload="
+      () => {
         appStore.productDialog();
       }
     "

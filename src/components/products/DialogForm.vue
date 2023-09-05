@@ -6,12 +6,9 @@
       :scrim="false"
       transition="dialog-bottom-transition"
     >
-      <template v-slot:activator="{ props }">
-        <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
-      </template>
       <v-card class="py-2">
         <v-card-title>
-          <span class="text-h5"
+          <span class="text-h6"
             >{{ formdata.ID ? "Editar" : "Nuevo" }} Producto</span
           >
         </v-card-title>
@@ -215,7 +212,7 @@ import { ref } from "vue";
 import { onMounted, onUpdated } from "vue";
 import PricesForm from "./PricesForm.vue";
 
-const emit = defineEmits(["closeDialog"]);
+const emit = defineEmits(["closeDialog", "reload"]);
 const props = defineProps({
   openDialog: Boolean,
   data: Object,
@@ -275,6 +272,7 @@ const save = async () => {
     formdata.value = capitalize(formdata.value);
     if (formdata.value.prices.length > 0) {
       formdata.value.prices.forEach((e) => {
+        e.equivalent = parseInt(e.equivalent);
         e.price = parseFloat(e.price);
         e.minprice = parseFloat(e.minprice);
       });
@@ -286,6 +284,7 @@ const save = async () => {
     formdata.value = defaultformdata.value;
     console.log(res);
     emit("closeDialog");
+    emit("reload");
   }
   setTimeout(() => (loading.value = false), 1000);
 };

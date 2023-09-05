@@ -15,7 +15,9 @@
         v-model="params.description"
         @update:modelValue="
           () => {
-            params.description = params.description.toUpperCase();
+            if (params.description) {
+              params.description = params.description.toUpperCase();
+            }
             loadData();
           }
         "
@@ -37,12 +39,12 @@
   <DialogForm
     :openDialog="openDialog"
     @closeDialog="
-      async () => {
+      () => {
         openDialog = false;
         dataDialog = {};
-        await loadData();
       }
     "
+    @reload="loadData"
     :data="dataDialog"
   />
 </template>
