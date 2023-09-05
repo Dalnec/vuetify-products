@@ -20,6 +20,7 @@
             () => {
               openfeatureDialog = true;
               featureType = 'measures';
+              $emit('openDialogFeature', { open: true, type: 'measures' });
             }
           "
         ></v-select>
@@ -67,7 +68,7 @@
 <script setup>
 import { ref } from "vue";
 
-const emit = defineEmits(["removePrice"]);
+const emit = defineEmits(["removePrice", "openDialogFeature"]);
 const props = defineProps({
   data: {
     type: Object,

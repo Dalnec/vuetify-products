@@ -2,7 +2,7 @@
   <v-card width="auto" style="margin: 5px">
     <v-card-item style="padding: 10px 16px 0 16px">
       <v-card-subtitle class="pa-0 d-flex align-center justify-space-between">
-        <div class="text-subtitle-1">{{ data.code }}</div>
+        <div class="text-subtitle-1">{{ Data.code }}</div>
         <v-btn
           density="compact"
           size="small"
@@ -11,20 +11,20 @@
           icon="mdi-pencil"
           @click="
             () => {
-              $emit('openDialog', data);
+              $emit('openDialog', Data);
             }
           "
         />
       </v-card-subtitle>
-      <v-card-title style="padding: 0">{{ data.description }}</v-card-title>
+      <v-card-title style="padding: 0">{{ Data.description }}</v-card-title>
       <v-card-subtitle style="padding: 0" class="text-subtitle-1">
-        {{ data.brand.description }} / {{ data.category.description }}
+        {{ Data.brand.description }} / {{ Data.category.description }}
       </v-card-subtitle>
     </v-card-item>
     <v-card-text class="pa-0 d-flex justify-space-between">
       <v-chip class="ma-1 text-subtitle-1" color="success" variant="text">
         <v-icon start icon="mdi-currency-usd"></v-icon>
-        {{ data.price ? data.price.toFixed(2) : 0.0 }}
+        {{ Data.price ? Data.price.toFixed(2) : 0.0 }}
       </v-chip>
       <v-chip
         v-show="showMinPrice"
@@ -33,7 +33,7 @@
         variant="text"
       >
         <v-icon start icon="mdi-currency-usd"></v-icon>
-        {{ data.minprice ? data.minprice.toFixed(2) : 0.0 }}
+        {{ Data.minprice ? Data.minprice.toFixed(2) : 0.0 }}
       </v-chip>
       <v-btn
         size="small"
@@ -51,6 +51,7 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import { ref } from "vue";
 
 const emit = defineEmits(["openDialog"]);
@@ -58,4 +59,16 @@ const props = defineProps({
   data: Object,
 });
 const showMinPrice = ref(false);
+const Data = ref(props.data);
+
+const getCardPrices = () => {
+  const cardprices = Data.value.prices.find((p) => p.measure_id == 1);
+  if (cardprices) {
+    Data.value.price = cardprices.price;
+    Data.value.minprice = cardprices.minprice;
+  }
+};
+onMounted(() => {
+  getCardPrices();
+});
 </script>

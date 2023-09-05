@@ -2,7 +2,13 @@
   <v-dialog v-model="props.openfeatureDialog" width="300">
     <v-card>
       <v-card-title>
-        {{ featureType == "brands" ? "Marca" : "Categoria" }}</v-card-title
+        {{
+          featureType == "brands"
+            ? "Marca"
+            : featureType == "categories"
+            ? "Categoria"
+            : "Unidad Medida"
+        }}</v-card-title
       >
       <v-card-text>
         <v-form ref="formRef">

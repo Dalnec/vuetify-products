@@ -6,7 +6,9 @@
       </template>
       <v-card class="py-2">
         <v-card-title>
-          <span class="text-h5">Nuevo Producto</span>
+          <span class="text-h5"
+            >{{ formdata.ID ? "Editar" : "Nuevo" }} Producto</span
+          >
         </v-card-title>
         <v-card-text class="pa-1">
           <v-form ref="formRef">
@@ -133,6 +135,12 @@
                     formdata.prices.splice(index, 1);
                   }
                 "
+                @openDialogFeature="
+                  (f) => {
+                    openfeatureDialog = f.open;
+                    featureType = f.type;
+                  }
+                "
               />
             </v-container>
             <v-divider></v-divider>
@@ -178,6 +186,11 @@
           case 'categories':
             categoryOptions = await loadfeatures('categories');
             formdata.category_id = f.ID;
+            break;
+          case 'measures':
+            measuresOptions = await loadfeatures('measures');
+            // enviar x props index y id para actualizar unit measure
+            // formdata.measure_id = f.ID;
             break;
           default:
             break;
