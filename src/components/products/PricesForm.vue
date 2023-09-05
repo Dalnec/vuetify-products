@@ -37,6 +37,7 @@
           append-inner-icon="mdi-plus-thick"
           @click:append-inner="
             () => {
+              dataPrice.active = false;
               openfeatureDialog = true;
               featureType = 'measures';
               $emit('openDialogFeature', { open: true, type: 'measures' });
