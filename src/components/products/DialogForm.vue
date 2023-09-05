@@ -1,6 +1,11 @@
 <template>
   <v-row justify="center" class="d-none">
-    <v-dialog v-model="props.openDialog" persistent width="1024">
+    <v-dialog
+      v-model="props.openDialog"
+      fullscreen
+      :scrim="false"
+      transition="dialog-bottom-transition"
+    >
       <template v-slot:activator="{ props }">
         <v-btn color="primary" v-bind="props"> Open Dialog </v-btn>
       </template>
@@ -10,6 +15,7 @@
             >{{ formdata.ID ? "Editar" : "Nuevo" }} Producto</span
           >
         </v-card-title>
+        <v-divider></v-divider>
         <v-card-text class="pa-1">
           <v-form ref="formRef">
             <v-container>
@@ -60,14 +66,16 @@
                 </v-col>
 
                 <v-col cols="12" sm="12" class="pa-1">
-                  <v-text-field
+                  <v-textarea
                     density="compact"
                     label="Descripcion"
                     v-model="formdata.description"
                     required
                     :rules="nameRules"
                     clearable
-                  ></v-text-field>
+                    auto-grow
+                    rows="1"
+                  ></v-textarea>
                 </v-col>
                 <!-- <v-col cols="12" sm="6" class="pa-1">
                   <v-text-field
@@ -143,9 +151,9 @@
                 "
               />
             </v-container>
-            <v-divider></v-divider>
           </v-form>
         </v-card-text>
+        <v-divider></v-divider>
         <v-card-actions class="px-5">
           <v-spacer></v-spacer>
           <v-btn
@@ -169,7 +177,7 @@
             Guardar
           </v-btn>
         </v-card-actions>
-        <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre>
+        <!-- <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre> -->
       </v-card>
     </v-dialog>
   </v-row>
@@ -237,6 +245,7 @@ const formdata = props.data
 const addPrice = () => {
   formdata.value.prices.push({
     measure_id: 1,
+    equivalent: 1,
     price: undefined,
     minprice: undefined,
   });

@@ -12,8 +12,13 @@
         single-line
         hide-details
         @click:append-inner="loadData"
-        v-model="search"
-        @update:modelValue="loadData"
+        v-model="params.description"
+        @update:modelValue="
+          () => {
+            params.description = params.description.toUpperCase();
+            loadData();
+          }
+        "
       ></v-text-field>
     </v-card>
     <CardProduct
@@ -32,10 +37,10 @@
   <DialogForm
     :openDialog="openDialog"
     @closeDialog="
-      () => {
+      async () => {
         openDialog = false;
         dataDialog = {};
-        appStore.productDialog();
+        await loadData();
       }
     "
     :data="dataDialog"
@@ -44,29 +49,39 @@
 
 <script setup>
 // import { store } from "../store/index";
+import { useDebounceFn } from "@vueuse/core";
 import { useAppStore } from "../store/app.js";
 import CardProduct from "../components/CardProduct.vue";
 import DialogForm from "./products/DialogForm.vue";
-import { onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import { ref } from "vue";
 import { axiosInstance } from "./api";
 
 const appStore = useAppStore();
 const loading = ref(false);
 const openDialog = ref(false);
-const search = ref("");
+const params = ref({
+  description: "",
+});
 const data = ref([]);
 const dataDialog = ref({});
 
-const loadData = async (s) => {
+const loadData = useDebounceFn(async (s) => {
   loading.value = true;
+  data.value = [];
   console.log(s);
-  const res = await axiosInstance.get(`/products`);
+  const res = await axiosInstance.get(`/products`, {
+    params: { ...params.value },
+  });
   setTimeout(() => {
     loading.value = false;
   }, 1000);
   data.value = res.data;
-};
+}, 450);
+
+const datacomputed = computed(() => {
+  return data.value;
+});
 
 onMounted(async () => {
   appStore.productDialog = loadData;

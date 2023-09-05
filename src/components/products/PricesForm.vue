@@ -6,8 +6,27 @@
     class="ma-1 pa-3 mx-auto"
     color="#FFFFFF"
   >
+    <div class="d-flex align-center justify-end">
+      <v-btn
+        density="compact"
+        size="x-small"
+        color="red-accent-3"
+        variant="text"
+        prepend-icon="mdi-close-thick"
+        @click="
+          () => {
+            $emit('removePrice', index);
+          }
+        "
+      >
+        <template v-slot:prepend>
+          <v-icon></v-icon>
+        </template>
+        Eliminar
+      </v-btn>
+    </div>
     <v-row class="pa-2" align="center" justify="center">
-      <v-col cols="10" class="pa-md-1 pb-0 px-1">
+      <v-col cols="8" class="pa-md-1 pb-0 px-1">
         <v-select
           density="compact"
           :items="measuresOptions"
@@ -25,19 +44,16 @@
           "
         ></v-select>
       </v-col>
-      <v-col cols="2" class="pa-1">
-        <v-btn
+      <v-col cols="4" class="pa-md-1 pb-0 px-1">
+        <v-text-field
           density="compact"
-          size="x-large"
-          color="red-accent-2"
-          variant="text"
-          icon="mdi-close-thick"
-          @click="
-            () => {
-              $emit('removePrice', index);
-            }
-          "
-        ></v-btn>
+          type="number"
+          label="Equivalencia"
+          v-model="dataPrice.equivalent"
+          required
+          :rules="pricesRules"
+          clearable
+        ></v-text-field>
       </v-col>
       <v-col cols="6" class="pa-1">
         <v-text-field
@@ -61,6 +77,9 @@
           clearable
         ></v-text-field>
       </v-col>
+      <!-- <v-col cols="12" class="pa-0">
+        
+      </v-col> -->
     </v-row>
   </v-sheet>
 </template>
@@ -74,7 +93,7 @@ const props = defineProps({
     type: Object,
     default(rawProps) {
       console.log(rawProps);
-      return { category_id: 1, price: 0, minprice: 0 };
+      return { category_id: 1, equivalent: 1, price: 0, minprice: 0 };
     },
   },
   measuresOptions: Array,
