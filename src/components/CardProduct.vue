@@ -24,7 +24,7 @@
     <v-card-text class="pa-0 d-flex justify-space-between">
       <v-chip class="ma-1 text-subtitle-1" color="success" variant="text">
         <v-icon start icon="mdi-currency-usd"></v-icon>
-        {{ data.price.toFixed(2) }}
+        {{ data.price ? data.price.toFixed(2) : 0.0 }}
       </v-chip>
       <v-chip
         v-show="showMinPrice"
@@ -33,7 +33,7 @@
         variant="text"
       >
         <v-icon start icon="mdi-currency-usd"></v-icon>
-        {{ data.minprice.toFixed(2) }}
+        {{ data.minprice ? data.minprice.toFixed(2) : 0.0 }}
       </v-chip>
       <v-btn
         size="small"

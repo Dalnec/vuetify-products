@@ -116,69 +116,24 @@
                   variant="outlined"
                   color="deep-purple-accent-3"
                   prepend-icon="mdi-plus"
+                  @click="addPrice"
                 >
                   Agregar
                 </v-btn>
               </div>
 
-              <v-sheet
-                elevation="2"
-                rounded="lg"
-                border="md"
-                class="ma-1 pa-3 mx-auto"
-                color="#FAFAFA"
-              >
-                <v-row class="pa-2" align="center" justify="center">
-                  <v-col cols="10" class="pa-md-1 pb-0 px-1">
-                    <v-select
-                      density="compact"
-                      :items="categoryOptions"
-                      label="Unidad Medida"
-                      v-model="formdata.category_id"
-                      required
-                      clearable
-                      append-inner-icon="mdi-plus-thick"
-                      @click:append-inner="
-                        () => {
-                          openfeatureDialog = true;
-                          featureType = 'categories';
-                        }
-                      "
-                    ></v-select>
-                  </v-col>
-                  <v-col cols="2" class="pa-1">
-                    <v-btn
-                      density="compact"
-                      size="x-large"
-                      color="red-accent-2"
-                      variant="text"
-                      icon="mdi-close-thick"
-                    ></v-btn>
-                  </v-col>
-                  <v-col cols="6" class="pa-1">
-                    <v-text-field
-                      density="compact"
-                      type="number"
-                      label="Precio (x menor)"
-                      v-model="formdata.price"
-                      required
-                      :rules="pricesRules"
-                      clearable
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="6" class="pa-1">
-                    <v-text-field
-                      density="compact"
-                      type="number"
-                      label="Precio (x mayor)"
-                      v-model="formdata.minprice"
-                      required
-                      :rules="pricesRules"
-                      clearable
-                    ></v-text-field>
-                  </v-col>
-                </v-row>
-              </v-sheet>
+              <PricesForm
+                v-for="(price, index) in formdata.prices"
+                :key="index"
+                :index="index"
+                :data="price"
+                :measuresOptions="measuresOptions"
+                @remove-price="
+                  () => {
+                    formdata.prices.splice(index, 1);
+                  }
+                "
+              />
             </v-container>
             <v-divider></v-divider>
           </v-form>
@@ -237,6 +192,7 @@ import { axiosInstance } from "../api/index";
 import DialogFormFeature from "./DialogFormFeature.vue";
 import { ref } from "vue";
 import { onMounted, onUpdated } from "vue";
+import PricesForm from "./PricesForm.vue";
 
 const emit = defineEmits(["closeDialog"]);
 const props = defineProps({
@@ -250,6 +206,7 @@ const openfeatureDialog = ref(false);
 const formRef = ref();
 const brandsOptions = ref([]);
 const categoryOptions = ref([]);
+const measuresOptions = ref([]);
 const defaultformdata = ref({
   code: "",
   description: "",
@@ -258,22 +215,19 @@ const defaultformdata = ref({
   price: undefined,
   minprice: undefined,
   user_id: 1,
+  prices: [],
 });
 const formdata = props.data
   ? ref({ ...props.data })
   : ref({ ...defaultformdata.value });
 
-const pricesRules = [
-  (v) => !!v || "Precio es requerido",
-  (v) => /^\d+(\.\d+)?$/.test(v) || "Solo numeros",
-  (v) =>
-    (v && v.toString().split(".")[0].length <= 5) ||
-    "No mas de 5 digitos antes del punto decimal",
-  (v) =>
-    (v && v.toString().split(".").length < 2) ||
-    (v && v.toString().split(".")[1].length <= 2) ||
-    "No mas de 2 digitos despues del punto decimal",
-];
+const addPrice = () => {
+  formdata.value.prices.push({
+    measure_id: 1,
+    price: undefined,
+    minprice: undefined,
+  });
+};
 
 const nameRules = [
   (value) => {
@@ -297,8 +251,13 @@ const save = async () => {
     let res;
     loading.value = true;
     formdata.value = capitalize(formdata.value);
-    formdata.value.price = parseFloat(formdata.value.price);
-    formdata.value.minprice = parseFloat(formdata.value.minprice);
+    if (formdata.value.prices.length > 0) {
+      formdata.value.prices.forEach((e) => {
+        e.price = parseFloat(e.price);
+        e.minprice = parseFloat(e.minprice);
+      });
+    }
+    console.log("formdata.value", formdata.value);
     res = await axiosInstance.post("products", {
       ...formdata.value,
     });
@@ -323,5 +282,7 @@ onUpdated(() => {
 onMounted(async () => {
   brandsOptions.value = await loadfeatures("brands");
   categoryOptions.value = await loadfeatures("categories");
+  measuresOptions.value = await loadfeatures("measures");
+  console.log(measuresOptions.value);
 });
 </script>
