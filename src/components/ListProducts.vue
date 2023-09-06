@@ -55,7 +55,7 @@ import { useDebounceFn } from "@vueuse/core";
 import { useAppStore } from "../store/app.js";
 import CardProduct from "../components/CardProduct.vue";
 import DialogForm from "./products/DialogForm.vue";
-import { computed, onMounted } from "vue";
+import { onMounted } from "vue";
 import { ref } from "vue";
 import { axiosInstance } from "./api";
 
@@ -80,10 +80,6 @@ const loadData = useDebounceFn(async (s) => {
   }, 1000);
   data.value = res.data;
 }, 450);
-
-const datacomputed = computed(() => {
-  return data.value;
-});
 
 onMounted(async () => {
   appStore.productDialog = loadData;

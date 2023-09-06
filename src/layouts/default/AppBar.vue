@@ -34,6 +34,7 @@
         appStore.productDialog();
       }
     "
+    :data="{ ...data }"
   />
 </template>
 
@@ -46,4 +47,14 @@ import router from "@/router";
 defineEmits(["drawer"]);
 const openDialog = ref(false);
 const appStore = useAppStore();
+const data = {
+  code: "",
+  description: "",
+  category_id: undefined,
+  brand_id: undefined,
+  price: undefined,
+  minprice: undefined,
+  user_id: 1,
+  prices: [],
+};
 </script>

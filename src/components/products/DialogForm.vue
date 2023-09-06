@@ -6,149 +6,167 @@
       :scrim="false"
       transition="dialog-bottom-transition"
     >
-      <v-card class="py-2">
-        <v-card-title>
-          <span class="text-h6"
-            >{{ formdata.ID ? "Editar" : "Nuevo" }} Producto</span
+      <v-card>
+        <v-toolbar density="compact">
+          <v-btn
+            icon
+            dark
+            @click="
+              () => {
+                clearForm();
+                $emit('closeDialog');
+              }
+            "
           >
-        </v-card-title>
-        <v-divider></v-divider>
-        <v-card-text class="pa-1">
-          <v-form ref="formRef">
-            <v-container>
-              <v-row class="pa-2">
-                <v-col cols="12" sm="6" md="4" class="pa-1">
-                  <v-text-field
-                    density="compact"
-                    label="Código"
-                    v-model="formdata.code"
-                    hint="Opcional"
-                    persistent-hint
-                    clearable
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="3" md="4" class="pa-md-1 pa-0 pr-1">
-                  <v-select
-                    density="compact"
-                    :items="brandsOptions"
-                    label="Marca"
-                    v-model="formdata.brand_id"
-                    required
-                    clearable
-                    append-inner-icon="mdi-plus-thick"
-                    @click:append-inner="
-                      () => {
-                        openfeatureDialog = true;
-                        featureType = 'brands';
-                      }
-                    "
-                  ></v-select>
-                </v-col>
-                <v-col cols="12" sm="3" md="4" class="pa-md-1 pa-0 ps-1">
-                  <v-select
-                    density="compact"
-                    :items="categoryOptions"
-                    label="Categoria"
-                    v-model="formdata.category_id"
-                    required
-                    clearable
-                    append-inner-icon="mdi-plus-thick"
-                    @click:append-inner="
-                      () => {
-                        openfeatureDialog = true;
-                        featureType = 'categories';
-                      }
-                    "
-                  ></v-select>
-                </v-col>
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>
+            {{ formdata.ID ? "Editar" : "Nuevo" }} Producto
+          </v-toolbar-title>
+          <v-spacer></v-spacer>
+          <!-- <v-toolbar-items>
+            <v-btn variant="text" @click=""> Save </v-btn>
+          </v-toolbar-items> -->
+        </v-toolbar>
 
-                <v-col cols="12" sm="12" class="pa-1">
-                  <v-textarea
-                    density="compact"
-                    label="Descripcion"
-                    v-model="formdata.description"
-                    required
-                    :rules="nameRules"
-                    clearable
-                    auto-grow
-                    rows="1"
-                  ></v-textarea>
-                </v-col>
-                <!-- <v-col cols="12" sm="6" class="pa-1">
-                  <v-text-field
-                    density="compact"
-                    type="number"
-                    label="Precio (x menor)"
-                    v-model="formdata.price"
-                    required
-                    :rules="pricesRules"
-                    clearable
-                  ></v-text-field>
-                </v-col>
-                <v-col cols="12" sm="6" class="pa-1">
-                  <v-text-field
-                    density="compact"
-                    type="number"
-                    label="Precio (x mayor)"
-                    v-model="formdata.minprice"
-                    required
-                    :rules="pricesRules"
-                    clearable
-                  ></v-text-field>
-                </v-col> -->
-                <!-- <v-col cols="12" sm="6">
-                <v-autocomplete
-                  :items="[
-                    'Skiing',
-                    'Ice hockey',
-                    'Soccer',
-                    'Basketball',
-                    'Hockey',
-                    'Reading',
-                    'Writing',
-                    'Coding',
-                    'Basejump',
-                  ]"
-                  label="Interests"
-                  multiple
-                ></v-autocomplete>
-              </v-col> -->
-              </v-row>
-              <div
-                class="text-body-1 font-weight-bold mb-4 d-flex align-center justify-space-between"
-              >
-                PRECIOS
-                <v-btn
-                  size="small"
-                  variant="outlined"
-                  color="deep-purple-accent-3"
-                  prepend-icon="mdi-plus"
-                  @click="addPrice"
-                >
-                  Agregar
-                </v-btn>
-              </div>
+        <v-tabs v-if="showTabs" v-model="tab" density="compact" fixed-tabs>
+          <v-tab value="one">General</v-tab>
+          <v-tab value="two">Sub-Productos</v-tab>
+        </v-tabs>
 
-              <PricesForm
-                v-for="(price, index) in formdata.prices"
-                :key="index"
-                :index="index"
-                :data="price"
-                :measuresOptions="measuresOptions"
-                @remove-price="
-                  () => {
-                    formdata.prices.splice(index, 1);
-                  }
-                "
-                @openDialogFeature="
-                  (f) => {
-                    openfeatureDialog = f.open;
-                    featureType = f.type;
-                  }
-                "
-              />
-            </v-container>
-          </v-form>
+        <v-card-text class="pa-0">
+          <v-window v-model="tab">
+            <v-window-item value="one">
+              <v-card class="">
+                <!-- <v-card-title>
+                  <span class="text-h6"
+                    >{{ formdata.ID ? "Editar" : "Nuevo" }} Producto</span
+                  >
+                </v-card-title> -->
+                <!-- <v-divider></v-divider> -->
+                <v-card-text class="pa-0">
+                  <v-form ref="formRef">
+                    <v-container>
+                      <v-row class="pa-2">
+                        <v-col cols="12" sm="6" md="4" class="pa-1">
+                          <v-text-field
+                            density="compact"
+                            label="Código"
+                            v-model="formdata.code"
+                            hint="Opcional"
+                            persistent-hint
+                            clearable
+                          ></v-text-field>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          sm="3"
+                          md="4"
+                          class="pa-md-1 pa-0 pr-1"
+                        >
+                          <v-select
+                            density="compact"
+                            :items="brandsOptions"
+                            label="Marca"
+                            v-model="formdata.brand_id"
+                            required
+                            clearable
+                            append-inner-icon="mdi-plus-thick"
+                            @click:append-inner="
+                              () => {
+                                openfeatureDialog = true;
+                                featureType = 'brands';
+                              }
+                            "
+                          ></v-select>
+                        </v-col>
+                        <v-col
+                          cols="12"
+                          sm="3"
+                          md="4"
+                          class="pa-md-1 pa-0 ps-1"
+                        >
+                          <v-select
+                            density="compact"
+                            :items="categoryOptions"
+                            label="Categoria"
+                            v-model="formdata.category_id"
+                            required
+                            clearable
+                            append-inner-icon="mdi-plus-thick"
+                            @click:append-inner="
+                              () => {
+                                openfeatureDialog = true;
+                                featureType = 'categories';
+                              }
+                            "
+                          ></v-select>
+                        </v-col>
+                        <v-col cols="12" sm="12" class="pa-1">
+                          <v-textarea
+                            density="compact"
+                            label="Descripcion"
+                            v-model="formdata.description"
+                            required
+                            :rules="nameRules"
+                            clearable
+                            auto-grow
+                            rows="1"
+                          ></v-textarea>
+                        </v-col>
+                      </v-row>
+                      <div class="px-2">
+                        <v-switch
+                          density="compact"
+                          hide-details
+                          color="primary"
+                          v-model="showTabs"
+                          label="Es juego?"
+                        ></v-switch>
+                      </div>
+                      <div
+                        class="text-body-1 font-weight-bold mb-4 d-flex align-center justify-space-between"
+                      >
+                        PRECIOS
+                        <v-btn
+                          size="small"
+                          variant="outlined"
+                          color="deep-purple-accent-3"
+                          prepend-icon="mdi-plus"
+                          @click="addPrice"
+                        >
+                          Agregar
+                        </v-btn>
+                      </div>
+
+                      <PricesForm
+                        v-for="(price, index) in formdata.prices"
+                        :key="index"
+                        :index="index"
+                        :data="price"
+                        :measuresOptions="measuresOptions"
+                        @remove-price="
+                          () => {
+                            formdata.prices.splice(index, 1);
+                          }
+                        "
+                        @openDialogFeature="
+                          (f) => {
+                            openfeatureDialog = f.open;
+                            featureType = f.type;
+                          }
+                        "
+                      />
+                    </v-container>
+                  </v-form>
+                </v-card-text>
+
+                <!-- <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre> -->
+              </v-card>
+            </v-window-item>
+
+            <v-window-item v-if="showTabs" value="two"> Two </v-window-item>
+          </v-window>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-actions class="px-5">
@@ -158,7 +176,7 @@
             variant="text"
             @click="
               () => {
-                formdata = defaultformdata;
+                clearForm();
                 $emit('closeDialog');
               }
             "
@@ -174,7 +192,6 @@
             Guardar
           </v-btn>
         </v-card-actions>
-        <!-- <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre> -->
       </v-card>
     </v-dialog>
   </v-row>
@@ -215,7 +232,9 @@ import PricesForm from "./PricesForm.vue";
 const emit = defineEmits(["closeDialog", "reload"]);
 const props = defineProps({
   openDialog: Boolean,
-  data: Object,
+  data: {
+    type: Object,
+  },
 });
 
 const loading = ref(false);
@@ -225,6 +244,10 @@ const formRef = ref();
 const brandsOptions = ref([]);
 const categoryOptions = ref([]);
 const measuresOptions = ref([]);
+
+const tab = ref("one");
+const showTabs = ref(false);
+
 const defaultformdata = ref({
   code: "",
   description: "",
@@ -277,11 +300,10 @@ const save = async () => {
         e.minprice = parseFloat(e.minprice);
       });
     }
-    console.log("formdata.value", formdata.value);
     res = await axiosInstance.post("products", {
       ...formdata.value,
     });
-    formdata.value = defaultformdata.value;
+    clearForm();
     console.log(res);
     emit("closeDialog");
     emit("reload");
@@ -294,6 +316,10 @@ const loadfeatures = async (featureType) => {
   return res.data.map((f) => ({ title: f.description, value: f.ID }));
 };
 
+const clearForm = () => {
+  formdata.value = defaultformdata.value;
+};
+
 onUpdated(() => {
   if (props.data) {
     formdata.value = props.data;
@@ -304,6 +330,5 @@ onMounted(async () => {
   brandsOptions.value = await loadfeatures("brands");
   categoryOptions.value = await loadfeatures("categories");
   measuresOptions.value = await loadfeatures("measures");
-  console.log(measuresOptions.value);
 });
 </script>

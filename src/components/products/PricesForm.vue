@@ -3,7 +3,7 @@
     elevation="0"
     rounded
     border
-    class="ma-1 pa-3 mx-auto"
+    class="ma-1 pt-1 px-2 mx-auto"
     color="#FFFFFF"
   >
     <div class="d-flex align-center justify-end">
