@@ -36,7 +36,7 @@
       "
     />
   </div>
-  <DialogForm
+  <TabsForm
     :openDialog="openDialog"
     @closeDialog="
       () => {
@@ -54,10 +54,11 @@
 import { useDebounceFn } from "@vueuse/core";
 import { useAppStore } from "../store/app.js";
 import CardProduct from "../components/CardProduct.vue";
-import DialogForm from "./products/DialogForm.vue";
+// import DialogForm from "./products/DialogForm.vue";
 import { onMounted } from "vue";
 import { ref } from "vue";
 import { axiosInstance } from "./api";
+import TabsForm from "./products/TabsForm.vue";
 
 const appStore = useAppStore();
 const loading = ref(false);

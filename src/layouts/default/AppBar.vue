@@ -22,7 +22,7 @@
     </v-btn>
   </v-app-bar>
 
-  <DialogForm
+  <TabsForm
     :openDialog="openDialog"
     @closeDialog="
       () => {
@@ -36,6 +36,21 @@
     "
     :data="{ ...data }"
   />
+
+  <!-- <DialogForm
+    :openDialog="openDialog"
+    @closeDialog="
+      () => {
+        openDialog = false;
+      }
+    "
+    @reload="
+      () => {
+        appStore.productDialog();
+      }
+    "
+    :data="{ ...data }"
+  /> -->
 </template>
 
 <script setup>
@@ -43,6 +58,7 @@ import { useAppStore } from "../../store/app";
 import { ref } from "vue";
 import DialogForm from "../../components/products/DialogForm";
 import router from "@/router";
+import TabsForm from "@/components/products/TabsForm.vue";
 
 defineEmits(["drawer"]);
 const openDialog = ref(false);
@@ -55,6 +71,13 @@ const data = {
   price: undefined,
   minprice: undefined,
   user_id: 1,
-  prices: [],
+  prices: [
+    {
+      measure_id: 1,
+      equivalent: 1,
+      price: undefined,
+      minprice: undefined,
+    },
+  ],
 };
 </script>
