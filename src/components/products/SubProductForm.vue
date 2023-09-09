@@ -6,7 +6,10 @@
     class="ma-1 pt-1 px-2 mx-auto"
     color="#FFFFFF"
   >
-    <div class="d-flex align-center justify-end">
+    <div class="d-flex align-center justify-space-between pa-1">
+      <v-chip size="x-small" variant="outlined" color="primary" class="px-3">
+        UNIDAD 1
+      </v-chip>
       <v-btn
         density="compact"
         size="x-small"
@@ -15,7 +18,7 @@
         prepend-icon="mdi-close-thick"
         @click="
           () => {
-            $emit('removePrice', index);
+            $emit('removeSubProduct', index);
           }
         "
       >
@@ -36,7 +39,7 @@
           clearable
         ></v-text-field>
       </v-col>
-      <v-col cols="8" class="pa-md-1 pb-0 px-1">
+      <!-- <v-col cols="8" class="pa-md-1 pb-0 px-1">
         <v-select
           density="compact"
           :items="measuresOptions"
@@ -56,7 +59,7 @@
           :rules="pricesRules"
           disabled
         ></v-text-field>
-      </v-col>
+      </v-col> -->
       <v-col cols="12" sm="12" class="pa-1">
         <v-textarea
           density="compact"
@@ -98,10 +101,14 @@
 <script setup>
 import { ref } from "vue";
 
-const emit = defineEmits(["removePrice", "openDialogFeature"]);
+const emit = defineEmits([
+  "removePrice",
+  "openDialogFeature",
+  "removeSubProduct",
+]);
 const props = defineProps({
   data: Object,
-  measuresOptions: Array,
+
   index: Number,
 });
 

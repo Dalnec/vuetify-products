@@ -70,8 +70,12 @@
                         v-for="(subProduct, i) in subProducts"
                         :key="i"
                         :data="subProduct"
-                        :measuresOptions="measuresOptions"
                         :index="i"
+                        @removeSubProduct="
+                          (p) => {
+                            subProducts.splice(p, 1);
+                          }
+                        "
                       />
                     </v-form>
                     <pre>{{ JSON.stringify(subProducts, 0, 2) }}</pre>
@@ -128,7 +132,7 @@ const formRef = ref();
 
 const tab = ref(null);
 
-const measuresOptions = ref([]);
+// const measuresOptions = ref([]);
 const subProducts = ref([]);
 const defaultformdata = ref({
   code: "",
@@ -190,12 +194,12 @@ const addProduct = () => {
   });
 };
 
-const loadfeatures = async (featureType) => {
-  const res = await axiosInstance.get(`/${featureType}`);
-  return res.data.map((f) => ({ title: f.description, value: f.ID }));
-};
+// const loadfeatures = async (featureType) => {
+//   const res = await axiosInstance.get(`/${featureType}`);
+//   return res.data.map((f) => ({ title: f.description, value: f.ID }));
+// };
 
 onMounted(async () => {
-  measuresOptions.value = await loadfeatures("measures");
+  // measuresOptions.value = await loadfeatures("measures");
 });
 </script>
