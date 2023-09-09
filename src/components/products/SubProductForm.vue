@@ -26,6 +26,16 @@
       </v-btn>
     </div>
     <v-row class="pa-2" align="center" justify="center">
+      <v-col cols="12" class="pa-1">
+        <v-text-field
+          density="compact"
+          label="Código"
+          v-model="dataPrice.code"
+          hint="Opcional"
+          persistent-hint
+          clearable
+        ></v-text-field>
+      </v-col>
       <v-col cols="8" class="pa-md-1 pb-0 px-1">
         <v-select
           density="compact"
@@ -33,16 +43,7 @@
           label="Unidad Medida"
           v-model="dataPrice.measure_id"
           required
-          clearable
-          append-inner-icon="mdi-plus-thick"
-          @click:append-inner="
-            () => {
-              dataPrice.active = false;
-              openfeatureDialog = true;
-              featureType = 'measures';
-              $emit('openDialogFeature', { open: true, type: 'measures' });
-            }
-          "
+          disabled
         ></v-select>
       </v-col>
       <v-col cols="4" class="pa-md-1 pb-0 px-1">
@@ -53,8 +54,20 @@
           v-model="dataPrice.equivalent"
           required
           :rules="pricesRules"
-          clearable
+          disabled
         ></v-text-field>
+      </v-col>
+      <v-col cols="12" sm="12" class="pa-1">
+        <v-textarea
+          density="compact"
+          label="Descripcion"
+          v-model="dataPrice.description"
+          required
+          :rules="nameRules"
+          clearable
+          auto-grow
+          rows="1"
+        ></v-textarea>
       </v-col>
       <v-col cols="6" class="pa-1">
         <v-text-field
@@ -78,9 +91,6 @@
           clearable
         ></v-text-field>
       </v-col>
-      <!-- <v-col cols="12" class="pa-0">
-          
-        </v-col> -->
     </v-row>
   </v-sheet>
 </template>
@@ -90,18 +100,19 @@ import { ref } from "vue";
 
 const emit = defineEmits(["removePrice", "openDialogFeature"]);
 const props = defineProps({
-  data: {
-    type: Object,
-    default(rawProps) {
-      console.log(rawProps);
-      return { category_id: 1, equivalent: 1, price: 0, minprice: 0 };
-    },
-  },
+  data: Object,
   measuresOptions: Array,
   index: Number,
 });
 
 const dataPrice = ref(props.data);
+
+const nameRules = [
+  (value) => {
+    if (value) return true;
+    return "Descripcion es requerido.";
+  },
+];
 
 const pricesRules = [
   (v) => !!v || "Precio es requerido",

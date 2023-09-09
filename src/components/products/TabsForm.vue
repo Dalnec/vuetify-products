@@ -66,8 +66,15 @@
                       </v-btn>
                     </div>
                     <v-form ref="formRef">
-                      <SubProductForm />
+                      <SubProductForm
+                        v-for="(subProduct, i) in subProducts"
+                        :key="i"
+                        :data="subProduct"
+                        :measuresOptions="measuresOptions"
+                        :index="i"
+                      />
                     </v-form>
+                    <pre>{{ JSON.stringify(subProducts, 0, 2) }}</pre>
                   </v-container>
                 </v-card-text>
               </v-card>
@@ -104,7 +111,7 @@
 </template>
 <script setup>
 import { axiosInstance } from "../api/index";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import DialogForm from "./DialogForm.vue";
 import SubProductForm from "./SubProductForm.vue";
 
@@ -121,6 +128,7 @@ const formRef = ref();
 
 const tab = ref(null);
 
+const measuresOptions = ref([]);
 const subProducts = ref([]);
 const defaultformdata = ref({
   code: "",
@@ -171,6 +179,23 @@ const save = async () => {
 };
 const clearForm = () => {
   formdata.value = defaultformdata.value;
+  subProducts.value = [];
 };
-const addProduct = () => {};
+const addProduct = () => {
+  subProducts.value.push({
+    measure_id: 1,
+    equivalent: 1,
+    price: undefined,
+    minprice: undefined,
+  });
+};
+
+const loadfeatures = async (featureType) => {
+  const res = await axiosInstance.get(`/${featureType}`);
+  return res.data.map((f) => ({ title: f.description, value: f.ID }));
+};
+
+onMounted(async () => {
+  measuresOptions.value = await loadfeatures("measures");
+});
 </script>
