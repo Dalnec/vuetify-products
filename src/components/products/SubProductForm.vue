@@ -3,13 +3,11 @@
     elevation="0"
     rounded
     border
-    class="ma-1 pt-1 px-2 mx-auto"
+    class="ma-1 pt-1 px-2 mx-auto mb-3"
     color="#FFFFFF"
+    :disabled="dataPrice.ID && edit ? true : false"
   >
     <div class="d-flex align-center justify-space-between pa-1">
-      <v-chip size="x-small" variant="outlined" color="primary" class="px-3">
-        UNIDAD 1
-      </v-chip>
       <v-btn
         density="compact"
         size="x-small"
@@ -27,6 +25,9 @@
         </template>
         Eliminar
       </v-btn>
+      <v-chip size="x-small" variant="outlined" color="primary" class="px-3">
+        UNIDAD 1
+      </v-chip>
     </div>
     <v-row class="pa-2" align="center" justify="center">
       <v-col cols="12" class="pa-1">
@@ -77,7 +78,7 @@
           density="compact"
           type="number"
           label="Precio (x menor)"
-          v-model="dataPrice.price"
+          v-model="dataPrice.prices[0].price"
           required
           :rules="pricesRules"
           clearable
@@ -88,13 +89,48 @@
           density="compact"
           type="number"
           label="Precio (x mayor)"
-          v-model="dataPrice.minprice"
+          v-model="dataPrice.prices[0].minprice"
           required
           :rules="pricesRules"
           clearable
         ></v-text-field>
       </v-col>
     </v-row>
+    <div
+      v-if="dataPrice.ID"
+      class="d-flex align-center justify-space-between pa-1"
+    >
+      <v-btn
+        density="compact"
+        size="small"
+        color="orange-darken-2"
+        variant="text"
+        @click="
+          () => {
+            $emit('removeSubProduct', index);
+          }
+        "
+      >
+        Cancelar
+      </v-btn>
+      <v-btn
+        density="compact"
+        size="small"
+        color="teal-accent-4"
+        variant="text"
+        prepend-icon="mdi-file-edit-outline"
+        @click="
+          () => {
+            edit = true;
+          }
+        "
+      >
+        <template v-slot:prepend>
+          <v-icon></v-icon>
+        </template>
+        {{ edit ? "Editar" : "Guardar" }}
+      </v-btn>
+    </div>
   </v-sheet>
 </template>
 
@@ -113,6 +149,7 @@ const props = defineProps({
 });
 
 const dataPrice = ref(props.data);
+const edit = ref(false);
 
 const nameRules = [
   (value) => {

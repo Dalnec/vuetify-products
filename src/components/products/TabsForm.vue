@@ -45,6 +45,7 @@
           <v-window v-model="tab">
             <v-window-item value="one">
               <DialogForm :data="formdata" />
+              <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre>
             </v-window-item>
 
             <v-window-item v-if="formdata.has_pieces" value="two">
@@ -65,7 +66,7 @@
                         Agregar
                       </v-btn>
                     </div>
-                    <v-form ref="formRef">
+                    <v-form ref="formSubProductsRef">
                       <SubProductForm
                         v-for="(subProduct, i) in subProducts"
                         :key="i"
@@ -115,7 +116,7 @@
 </template>
 <script setup>
 import { axiosInstance } from "../api/index";
-import { onMounted, ref } from "vue";
+import { onMounted, onUpdated, ref } from "vue";
 import DialogForm from "./DialogForm.vue";
 import SubProductForm from "./SubProductForm.vue";
 
@@ -129,6 +130,7 @@ const props = defineProps({
 
 const loading = ref(false);
 const formRef = ref();
+const formSubProductsRef = ref(null);
 
 const tab = ref(null);
 
@@ -139,8 +141,6 @@ const defaultformdata = ref({
   description: "",
   category_id: undefined,
   brand_id: undefined,
-  price: undefined,
-  minprice: undefined,
   user_id: 1,
   has_pieces: false,
   prices: [],
@@ -150,6 +150,7 @@ const formdata = props.data
   : ref({ ...defaultformdata.value });
 
 const capitalize = (data) => {
+  console.log({ data });
   return Object.fromEntries(
     Object.entries(data).map(([key, value]) => [
       key,
@@ -158,28 +159,76 @@ const capitalize = (data) => {
   );
 };
 
-const save = async () => {
-  const { valid } = await formRef.value.validate();
-  if (valid) {
-    let res;
-    loading.value = true;
-    formdata.value = capitalize(formdata.value);
-    if (formdata.value.prices.length > 0) {
-      formdata.value.prices.forEach((e) => {
-        e.equivalent = parseInt(e.equivalent);
-        e.price = parseFloat(e.price);
-        e.minprice = parseFloat(e.minprice);
-      });
-    }
-    res = await axiosInstance.post("products", {
-      ...formdata.value,
-    });
-    clearForm();
-    console.log(res);
-    emit("closeDialog");
-    emit("reload");
+const toNumber = (prices) => {
+  prices.forEach((e) => {
+    e.equivalent = parseInt(e.equivalent);
+    e.price = parseFloat(e.price);
+    e.minprice = parseFloat(e.minprice);
+  });
+  return prices;
+};
+
+const formatProduct = () => {
+  formdata.value = capitalize(formdata.value);
+  if (formdata.value.prices.length > 0) {
+    formdata.value.prices = [...toNumber(formdata.value.prices)];
   }
-  setTimeout(() => (loading.value = false), 1000);
+};
+
+const formatSubProducts = () => {
+  subProducts.value.forEach((s) => {
+    s.prices = [...toNumber(s.prices)];
+  });
+
+  subProducts.value = subProducts.value.map((s) => ({
+    ...s,
+    code: typeof s.code == "string" ? s.code.toUpperCase() : s.code,
+    description:
+      typeof s.description == "string"
+        ? s.description.toUpperCase()
+        : s.description,
+  }));
+};
+
+const save = async () => {
+  // const { valid } = await formRef.value.validate();
+  // if (valid) {
+  let prod_res, sub_prod_res;
+  loading.value = true;
+
+  formatProduct();
+  await axiosInstance
+    .post("products", {
+      ...formdata.value,
+    })
+    .then(async (res) => {
+      console.log({ res });
+      if (subProducts.value.length > 0) {
+        formatSubProducts();
+        subProducts.value = subProducts.value.map((s) => ({
+          ...s,
+          product_id: res.data.ID,
+        }));
+        console.log("subProducts", subProducts.value);
+        sub_prod_res = await axiosInstance.post("products-batch", [
+          ...subProducts.value,
+        ]);
+      }
+    })
+    .then(() => {
+      clearForm();
+      console.log(prod_res);
+      console.log(sub_prod_res);
+      emit("closeDialog");
+      emit("reload");
+      setTimeout(() => (loading.value = false), 1000);
+    })
+    .catch((err) => {
+      // Handle error
+      console.log(err);
+    });
+
+  // }
 };
 const clearForm = () => {
   formdata.value = defaultformdata.value;
@@ -187,19 +236,37 @@ const clearForm = () => {
 };
 const addProduct = () => {
   subProducts.value.push({
-    measure_id: 1,
-    equivalent: 1,
-    price: undefined,
-    minprice: undefined,
+    description: undefined,
+    category_id: formdata.value.category_id,
+    brand_id: formdata.value.brand_id,
+    user_id: 1,
+    product_id: formdata.value.ID ? formdata.value.ID : 0,
+    prices: [
+      {
+        equivalent: 1,
+        price: 0,
+        minprice: 0,
+        measure_id: 1,
+      },
+    ],
   });
 };
 
-// const loadfeatures = async (featureType) => {
-//   const res = await axiosInstance.get(`/${featureType}`);
-//   return res.data.map((f) => ({ title: f.description, value: f.ID }));
-// };
-
-onMounted(async () => {
-  // measuresOptions.value = await loadfeatures("measures");
+const loadSubProducts = async (ID) => {
+  const res = await axiosInstance.get(`/products-associations/${ID}`);
+  // console.log(res);
+  console.log(res.data.products);
+  if (res.data) {
+    subProducts.value = res.data.products;
+    formdata.value.has_pieces = true;
+  }
+};
+onUpdated(async () => {
+  if (props.data.ID) {
+    formdata.value = props.data;
+    await loadSubProducts(formdata.value.ID);
+  }
 });
+
+// onMounted(async () => {});
 </script>

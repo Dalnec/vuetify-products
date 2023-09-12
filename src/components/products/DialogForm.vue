@@ -163,8 +163,6 @@ const defaultformdata = ref({
   description: "",
   category_id: undefined,
   brand_id: undefined,
-  price: undefined,
-  minprice: undefined,
   user_id: 1,
   has_pieces: false,
   prices: [],
