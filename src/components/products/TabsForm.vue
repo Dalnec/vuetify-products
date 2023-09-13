@@ -210,9 +210,12 @@ const save = async () => {
           product_id: res.data.ID,
         }));
         console.log("subProducts", subProducts.value);
-        sub_prod_res = await axiosInstance.post("products-batch", [
-          ...subProducts.value,
-        ]);
+        subProducts.value = subProducts.value.filter((s) => !s.ID);
+        if (subProducts.value.length > 0) {
+          sub_prod_res = await axiosInstance.post("products-batch", [
+            ...subProducts.value,
+          ]);
+        }
       }
     })
     .then(() => {
@@ -254,9 +257,7 @@ const addProduct = () => {
 
 const loadSubProducts = async (ID) => {
   const res = await axiosInstance.get(`/products-associations/${ID}`);
-  // console.log(res);
-  console.log(res.data.products);
-  if (res.data) {
+  if (res.data.products.length > 0) {
     subProducts.value = res.data.products;
     formdata.value.has_pieces = true;
   }
