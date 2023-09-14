@@ -16,8 +16,22 @@
           "
         />
       </v-card-subtitle>
-      <v-card-title style="padding: 0">{{ Data.description }}</v-card-title>
-      <v-card-subtitle style="padding: 0" class="text-subtitle-1">
+      <v-card-title
+        style="padding: 0"
+        @click="
+          viewDialog.show = true;
+          viewDialog.values = props.data;
+        "
+        >{{ Data.description }}</v-card-title
+      >
+      <v-card-subtitle
+        style="padding: 0"
+        class="text-subtitle-1"
+        @click="
+          viewDialog.show = true;
+          viewDialog.values = props.data;
+        "
+      >
         {{ Data.brand.description }} / {{ Data.category.description }}
       </v-card-subtitle>
     </v-card-item>
@@ -47,18 +61,36 @@
         "
       />
     </v-card-text>
+    <!-- <div>
+      <v-btn
+        class="w-full"
+        size="small"
+        color="primary"
+        dark
+        @click="
+          viewDialog.show = true;
+          viewDialog.values = props.data;
+        "
+      >
+        Mostrar informacion
+      </v-btn>
+    </div> -->
   </v-card>
+
+  <view-dialog-product :data="viewDialog" />
 </template>
 
 <script setup>
 import { onMounted } from "vue";
 import { ref } from "vue";
+import ViewDialogProduct from "./ViewDialogProduct.vue";
 
 const emit = defineEmits(["openDialog"]);
 const props = defineProps({
   data: Object,
 });
 const showMinPrice = ref(false);
+const viewDialog = ref({ show: false, values: {} });
 const Data = ref(props.data);
 
 const getCardPrices = () => {
