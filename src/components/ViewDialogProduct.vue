@@ -34,8 +34,8 @@
           {{ props.data.values.category.description }}
         </v-card-subtitle>
       </v-card-item>
-      <v-card-text class="pa-0 d-flex justify-space-between">
-        <v-chip class="ma-1 text-subtitle-1" color="success" variant="text">
+      <v-card-text class="pa-0">
+        <!-- <v-chip class="ma-1 text-subtitle-1" color="success" variant="text">
           <v-icon start icon="mdi-currency-usd"></v-icon>
           {{
             props.data.values.price ? props.data.values.price.toFixed(2) : 0.0
@@ -52,7 +52,8 @@
               ? props.data.values.minprice.toFixed(2)
               : 0.0
           }}
-        </v-chip>
+        </v-chip> -->
+        <view-card-prices />
       </v-card-text>
       <v-card-actions>
         <v-btn color="primary" dark @click="props.data.show = false">
@@ -60,10 +61,13 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <!-- <pre>{{ JSON.stringify(props.data.values, 0, 2) }}</pre> -->
   </v-dialog>
 </template>
 
 <script setup>
+import ViewCardPrices from "./ViewCardPrices.vue";
+
 const props = defineProps({ data: Object });
 </script>
 
