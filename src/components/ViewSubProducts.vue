@@ -3,6 +3,22 @@
     <v-list lines="one">
       <v-list-item class="w-100 pa-1">
         <v-list-item-title>
+          <v-card width="w-100">
+            <v-card-item style="padding: 10px 16px 0 16px">
+              <v-card-subtitle
+                class="pa-0 d-flex align-center justify-space-between"
+              >
+                <div class="text-subtitle-1">
+                  Código: {{ props.data.values.code }}
+                </div>
+              </v-card-subtitle>
+              <v-card-title style="padding: 0">
+                {{ props.data.values.description }}
+              </v-card-title>
+            </v-card-item>
+          </v-card>
+        </v-list-item-title>
+        <v-list-item-title>
           <v-chip
             size="small"
             variant="outlined"

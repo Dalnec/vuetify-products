@@ -45,7 +45,7 @@
           <v-window v-model="tab">
             <v-window-item value="one">
               <DialogForm :data="formdata" />
-              <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre>
+              <!-- <pre>{{ JSON.stringify(formdata, 0, 2) }}</pre> -->
             </v-window-item>
 
             <v-window-item v-if="formdata.has_pieces" value="two">
@@ -79,7 +79,7 @@
                         "
                       />
                     </v-form>
-                    <pre>{{ JSON.stringify(subProducts, 0, 2) }}</pre>
+                    <!-- <pre>{{ JSON.stringify(subProducts, 0, 2) }}</pre> -->
                   </v-container>
                 </v-card-text>
               </v-card>
@@ -195,7 +195,10 @@ const save = async () => {
   // if (valid) {
   let prod_res, sub_prod_res;
   loading.value = true;
-
+  formdata.value.prices = formdata.value.prices.map((p) => {
+    if (p.measure) delete p.measure;
+    return p;
+  });
   formatProduct();
   await axiosInstance
     .post("products", {

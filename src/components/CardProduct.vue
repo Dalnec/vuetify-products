@@ -95,6 +95,7 @@ const Data = ref(props.data);
 
 const getCardPrices = () => {
   const cardprices = Data.value.prices.find((p) => p.measure_id == 1);
+  console.log(cardprices);
   if (cardprices) {
     Data.value.price = cardprices.price;
     Data.value.minprice = cardprices.minprice;
