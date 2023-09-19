@@ -40,11 +40,16 @@
           :key="i"
           :data="price"
         />
-        <view-sub-products
-          v-for="(product, i) in subProducts"
-          :key="i"
-          :data="product"
-        />
+        <v-card width="w-100" variant="outlined" style="margin: 10px">
+          <v-card-item>
+            <v-card-title style="padding: 0">PIEZAS</v-card-title>
+            <view-sub-products
+              v-for="(product, i) in subProducts"
+              :key="i"
+              :data="product"
+            />
+          </v-card-item>
+        </v-card>
       </v-card-text>
       <v-card-actions>
         <v-btn
@@ -76,11 +81,12 @@ const loadSubProducts = async (ID) => {
   const res = await axiosInstance.get(`/products-associations/${ID}`);
   if (res.data.products.length > 0) {
     subProducts.value = res.data.products;
+    console.log(subProducts.value);
   }
 };
 
 onMounted(async () => {
-  console.log(props.data);
+  console.log("VIEW----", props.data);
   await loadSubProducts(props.data.values.ID);
 });
 </script>

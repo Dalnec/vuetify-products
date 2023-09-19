@@ -6,7 +6,7 @@
     class="ma-1 pt-1 px-2 mx-auto mb-3"
     color="#FFFFFF"
   >
-    <v-form ref="SubformRef" :disabled="!edit">
+    <v-form ref="SubformRef" :disabled="!dataPrice.ID ? false : !edit">
       <div class="d-flex align-center justify-space-between pa-1">
         <v-btn
           density="compact"

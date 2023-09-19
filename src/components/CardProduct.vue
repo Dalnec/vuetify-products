@@ -28,8 +28,8 @@
         style="padding: 0"
         class="text-subtitle-1"
         @click="
-          viewDialog.show = true;
           viewDialog.values = props.data;
+          viewDialog.show = true;
         "
       >
         {{ Data.brand.description }} / {{ Data.category.description }}
@@ -61,23 +61,9 @@
         "
       />
     </v-card-text>
-    <!-- <div>
-      <v-btn
-        class="w-full"
-        size="small"
-        color="primary"
-        dark
-        @click="
-          viewDialog.show = true;
-          viewDialog.values = props.data;
-        "
-      >
-        Mostrar informacion
-      </v-btn>
-    </div> -->
   </v-card>
 
-  <view-dialog-product :data="viewDialog" />
+  <view-dialog-product v-if="viewDialog.show" :data="viewDialog" />
 </template>
 
 <script setup>
@@ -95,13 +81,13 @@ const Data = ref(props.data);
 
 const getCardPrices = () => {
   const cardprices = Data.value.prices.find((p) => p.measure_id == 1);
-  console.log(cardprices);
   if (cardprices) {
     Data.value.price = cardprices.price;
     Data.value.minprice = cardprices.minprice;
   }
 };
 onMounted(() => {
+  console.log("CARD*****");
   getCardPrices();
 });
 </script>
