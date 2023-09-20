@@ -17,12 +17,13 @@
         />
       </v-card-subtitle>
       <v-card-title
-        style="padding: 0"
+        class="text-wrap"
+        style="padding: 0; font-size: 16px"
         @click="
           viewDialog.show = true;
           viewDialog.values = props.data;
         "
-        >{{ Data.description }}</v-card-title
+        ><p>{{ Data.description }}</p></v-card-title
       >
       <v-card-subtitle
         style="padding: 0"
@@ -87,7 +88,6 @@ const getCardPrices = () => {
   }
 };
 onMounted(() => {
-  console.log("CARD*****");
   getCardPrices();
 });
 </script>

@@ -3,13 +3,13 @@
     <v-list-item class="w-100 pa-1">
       <v-list-item-title>
         <v-card width="w-100">
-          <v-card-item style="padding: 10px 16px 0 16px">
+          <v-card-item style="padding: 0px">
             <v-card-subtitle
               class="pa-0 d-flex align-center justify-space-between"
             >
               <div class="text-subtitle-1">Código: {{ props.data.code }}</div>
             </v-card-subtitle>
-            <v-card-title style="padding: 0">
+            <v-card-title style="padding: 0; font-size: 17px" class="text-wrap">
               {{ props.data.description }}
             </v-card-title>
             <view-card-prices

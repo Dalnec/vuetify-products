@@ -72,7 +72,6 @@ const dataDialog = ref({});
 const loadData = useDebounceFn(async (s) => {
   loading.value = true;
   data.value = [];
-  console.log(s);
   const res = await axiosInstance.get(`/products`, {
     params: { ...params.value },
   });

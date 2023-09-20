@@ -26,7 +26,7 @@
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-subtitle>
-        <v-card-title style="padding: 0">
+        <v-card-title style="padding: 0; font-size: 17px" class="text-wrap">
           {{ props.data.values.description }}
         </v-card-title>
         <v-card-subtitle style="padding: 0" class="text-subtitle-1">
@@ -40,9 +40,16 @@
           :key="i"
           :data="price"
         />
-        <v-card width="w-100" variant="outlined" style="margin: 10px">
+        <v-card
+          v-if="subProducts.length > 0"
+          width="w-100"
+          variant="outlined"
+          style="margin: 10px"
+        >
           <v-card-item>
-            <v-card-title style="padding: 0">PIEZAS</v-card-title>
+            <v-card-title style="padding: 0; font-size: 18px">
+              PIEZAS
+            </v-card-title>
             <view-sub-products
               v-for="(product, i) in subProducts"
               :key="i"
@@ -86,7 +93,6 @@ const loadSubProducts = async (ID) => {
 };
 
 onMounted(async () => {
-  console.log("VIEW----", props.data);
   await loadSubProducts(props.data.values.ID);
 });
 </script>

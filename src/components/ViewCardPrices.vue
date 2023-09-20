@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto my-1 px-1">
-    <v-list lines="one">
+    <v-list lines="one" class="pa-0">
       <v-list-item class="w-100 pa-1">
         <v-list-item-title>
           <v-chip
