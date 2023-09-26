@@ -50,11 +50,9 @@
 </template>
 
 <script setup>
-// import { store } from "../store/index";
 import { useDebounceFn } from "@vueuse/core";
 import { useAppStore } from "../store/app.js";
 import CardProduct from "../components/CardProduct.vue";
-// import DialogForm from "./products/DialogForm.vue";
 import { onMounted } from "vue";
 import { ref } from "vue";
 import { axiosInstance } from "./api";
@@ -69,7 +67,7 @@ const params = ref({
 const data = ref([]);
 const dataDialog = ref({});
 
-const loadData = useDebounceFn(async (s) => {
+const loadData = useDebounceFn(async () => {
   loading.value = true;
   data.value = [];
   const res = await axiosInstance.get(`/products`, {
@@ -78,12 +76,13 @@ const loadData = useDebounceFn(async (s) => {
   setTimeout(() => {
     loading.value = false;
   }, 1000);
+  console.log(res.data);
   data.value = res.data;
 }, 450);
 
 onMounted(async () => {
   appStore.productDialog = loadData;
-  await loadData();
+  // await loadData();
 });
 </script>
 <style>

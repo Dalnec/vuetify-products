@@ -22,7 +22,7 @@
             value="home"
             variant="plain"
             color="primary"
-            @click="$router.push({ name: 'Home' })"
+            @click="$router.push('products')"
           ></v-list-item>
           <v-list-item
             class="text-h5"
@@ -55,9 +55,12 @@
 </template>
 
 <script setup>
+import { useUserStore } from "@/store/auth";
 import DefaultBar from "./AppBar.vue";
 import DefaultView from "./View.vue";
 
 import { ref } from "vue";
 const drawer = ref(null);
+const userStore = useUserStore();
+userStore.initializeStore();
 </script>

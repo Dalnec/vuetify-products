@@ -23,8 +23,9 @@
           viewDialog.show = true;
           viewDialog.values = props.data;
         "
-        ><p>{{ Data.description }}</p></v-card-title
       >
+        <p>{{ Data.description }}</p>
+      </v-card-title>
       <v-card-subtitle
         style="padding: 0"
         class="text-subtitle-1"
