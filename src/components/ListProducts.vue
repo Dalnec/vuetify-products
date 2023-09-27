@@ -82,7 +82,7 @@ const loadData = useDebounceFn(async () => {
 
 onMounted(async () => {
   appStore.productDialog = loadData;
-  // await loadData();
+  await loadData();
 });
 </script>
 <style>
