@@ -57,7 +57,6 @@ import { onMounted } from "vue";
 import { ref } from "vue";
 import { axiosInstance } from "./api";
 import TabsForm from "./products/TabsForm.vue";
-
 const appStore = useAppStore();
 const loading = ref(false);
 const openDialog = ref(false);

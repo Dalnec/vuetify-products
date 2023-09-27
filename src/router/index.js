@@ -47,7 +47,6 @@ router.beforeEach((to, from, next) => {
   userStore.checkAuthentication()
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (userStore.isAuthenticated) {
-      console.log("000000");
       next();
       return;
     } else {

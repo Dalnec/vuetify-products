@@ -12,7 +12,7 @@
 
         <v-text-field
           density="compact"
-          placeholder="Email address"
+          placeholder="Usuario Correo"
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
           v-model="formdata.email"
@@ -29,15 +29,15 @@
             rel="noopener noreferrer"
             target="_blank"
           >
-            Ovidaste tu contraseña?</a
-          >
+            Ovidaste tu contraseña?
+          </a>
         </div>
 
         <v-text-field
           :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
           :type="visible ? 'text' : 'password'"
           density="compact"
-          placeholder="Enter your password"
+          placeholder="Ingresa tu contraseña"
           prepend-inner-icon="mdi-lock-outline"
           variant="outlined"
           @click:append-inner="visible = !visible"
@@ -82,7 +82,7 @@
 </template>
 
 <script setup>
-import { axiosInstance } from "@/components/api";
+import { axiosInstanceLogin } from "@/components/api";
 import { useUserStore } from "@/store/auth";
 import { ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
@@ -103,7 +103,7 @@ const formdata = ref({ ...defaultformdata.value });
 
 const login = async () => {
   loading.value = true;
-  await axiosInstance
+  await axiosInstanceLogin
     .post("signin", {
       ...formdata.value,
     })
