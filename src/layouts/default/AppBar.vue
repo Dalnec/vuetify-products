@@ -6,6 +6,7 @@
     <v-app-bar-title>Productos </v-app-bar-title>
 
     <v-btn
+      v-if="userStore.user.role == 'admin'"
       icon
       @click="
         () => {
@@ -36,29 +37,17 @@
     "
     :data="{ ...data }"
   />
-
-  <!-- <DialogForm
-    :openDialog="openDialog"
-    @closeDialog="
-      () => {
-        openDialog = false;
-      }
-    "
-    @reload="
-      () => {
-        appStore.productDialog();
-      }
-    "
-    :data="{ ...data }"
-  /> -->
 </template>
 
 <script setup>
 import { useAppStore } from "../../store/app";
 import { ref } from "vue";
-import DialogForm from "../../components/products/DialogForm";
 import router from "@/router";
 import TabsForm from "@/components/products/TabsForm.vue";
+import { useUserStore } from "@/store/auth";
+const userStore = useUserStore();
+
+console.log(userStore.user.role);
 
 defineEmits(["drawer"]);
 const openDialog = ref(false);
